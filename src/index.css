@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Montserrat", sans-serif;
+  
+  --color-primary-bg: #121212;
+  --color-secondary-bg: #1A1A1A;
+  --color-text-primary: #EAEAEA;
+  --color-accent: #D4AF37;
+}
+
+@layer utilities {
+  .tracking-widest {
+    letter-spacing: 0.25em;
+  }
+}
+
+body {
+  background-color: var(--color-primary-bg);
+  color: var(--color-text-primary);
+}
