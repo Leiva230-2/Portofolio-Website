@@ -1,39 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const Navbar = () => {
-  const { scrollY } = useScroll();
-  const [windowHeight, setWindowHeight] = useState(800);
+const navItems = ['Home', 'About', 'Portfolio', 'Contact'];
 
-  useEffect(() => {
-    // Set initial window height
-    setWindowHeight(window.innerHeight);
-    const handleResize = () => setWindowHeight(window.innerHeight);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  
-  // Transform background color from transparent to DARK NIGHT (#5c5651)
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, windowHeight - 150, windowHeight],
-    ['rgba(92, 86, 81, 0)', 'rgba(92, 86, 81, 0)', 'rgba(92, 86, 81, 0.98)']
-  );
-
-  // Transform padding to make it compact when scrolled
-  const paddingY = useTransform(
-    scrollY,
-    [0, windowHeight],
-    ['2rem', '1rem']
-  );
-
+const FullNavbar = () => {
   return (
     <motion.nav 
-      style={{ backgroundColor, paddingTop: paddingY, paddingBottom: paddingY }}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="w-full flex items-center justify-between px-10 md:px-20 fixed top-0 left-0 z-50 backdrop-blur-sm shadow-sm border-b border-transparent"
+      exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="w-full flex items-center justify-between px-10 md:px-20 fixed top-0 left-0 z-50 py-8 pointer-events-auto"
     >
       <div className="hidden md:flex gap-8 text-xs font-sans tracking-widest text-white">
         <a href="#" className="hover:text-gray-300 transition-colors duration-300">HOME</a>
@@ -50,6 +27,118 @@ const Navbar = () => {
         <a href="#" className="hover:text-gray-300 transition-colors duration-300">CONTACT</a>
       </div>
     </motion.nav>
+  );
+};
+
+const PillNavbar = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [activeItem, setActiveItem] = useState('Home');
+  const timeoutRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsHovered(false);
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50, transition: { duration: 0.3 } }}
+      className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none"
+    >
+      <motion.nav
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        layout
+        initial={{ borderRadius: 50 }}
+        animate={{
+          backgroundColor: isHovered ? "rgba(20, 20, 20, 0.9)" : "rgba(20, 20, 20, 0.15)",
+          boxShadow: isHovered ? "0 0 20px rgba(174, 167, 163, 0.2)" : "0 0 0px rgba(0,0,0,0)",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 30
+        }}
+        className="pointer-events-auto flex items-center backdrop-blur-md border border-white/10 overflow-hidden"
+        style={{ height: '56px', padding: '0 8px' }}
+      >
+        <div className="flex items-center h-full">
+          <AnimatePresence initial={false}>
+            {navItems.map((item) => {
+              const isActive = activeItem === item;
+              const show = isHovered || isActive;
+
+              return show && (
+                <motion.div
+                  key={item}
+                  layout
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 'auto', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="overflow-hidden flex items-center h-full"
+                >
+                  <a
+                    href={`#${item.toLowerCase()}`}
+                    onClick={() => setActiveItem(item)}
+                    className={`h-10 px-5 rounded-full flex items-center justify-center whitespace-nowrap text-xs font-sans tracking-widest transition-all duration-300 ${
+                      isActive && isHovered
+                        ? 'bg-[#AEA7A3]/20 text-[#AEA7A3]'
+                        : isActive && !isHovered
+                        ? 'text-[#AEA7A3]'
+                        : 'text-white/60 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {item.toUpperCase()}
+                  </a>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+      </motion.nav>
+    </motion.div>
+  );
+};
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    
+    // Check initially
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <>
+      <AnimatePresence>
+        {!isScrolled && <FullNavbar key="full" />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isScrolled && <PillNavbar key="pill" />}
+      </AnimatePresence>
+    </>
   );
 };
 

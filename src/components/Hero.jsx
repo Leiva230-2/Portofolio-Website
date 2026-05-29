@@ -26,7 +26,7 @@ const Hero = () => {
         {/* Natural Glowing Background */}
         <motion.div 
           animate={{ opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[50vh] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.12)_0%,_transparent_60%)] z-0 pointer-events-none"
         ></motion.div>
 
@@ -35,8 +35,8 @@ const Hero = () => {
           <h2 className="text-xl md:text-3xl font-sans tracking-widest text-white whitespace-pre-line leading-relaxed drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
             {text}
             <motion.span 
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               className="inline-block ml-1 w-[2px] h-6 md:h-8 bg-white align-middle shadow-[0_0_8px_rgba(255,255,255,0.8)]"
             />
           </h2>
@@ -99,13 +99,13 @@ const Hero = () => {
               className="flex items-center gap-4 mb-4"
             >
                <span className="w-12 h-[1px] bg-[#D4AF37]"></span>
-               <span className="font-sans text-xs tracking-widest text-[#D4AF37] uppercase">Introduction</span>
+               <span className="font-sans text-xs tracking-widest text-[#D4AF37] uppercase">Let Me Introduce Myself</span>
             </motion.div>
             <h1 className="text-6xl md:text-8xl font-serif text-[#EAEAEA] leading-none mb-6">
               AVIEL <br /> AQUINO
             </h1>
             <p className="font-sans text-sm tracking-widest text-[#a3a3a3] uppercase max-w-sm leading-relaxed">
-              <strong className="text-[#EAEAEA]">Digital Transformations.</strong> <br/> We write the future.
+              <strong className="text-[#EAEAEA]">Data Scientist.</strong> <br/> CS STUDENT AT BINUS. ARCHITECTING REAL-WORLD AI & ML SOLUTIONS.
             </p>
           </motion.div>
 

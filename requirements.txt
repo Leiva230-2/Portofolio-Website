@@ -1,0 +1,11 @@
+# Frontend Dependencies for Portofolio Website
+# Note: Since this is a React/Node.js project, dependencies are typically installed via package.json using `npm install`.
+# This file is provided for reference.
+
+react==19.2.6
+react-dom==19.2.6
+framer-motion==12.40.0
+tailwindcss==4.3.0
+@tailwindcss/vite==4.3.0
+lucide-react==1.16.0
+vite==8.0.12
